@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  server:
+    build:
+      context: ./aes-meal-server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_DATABASE=aes-meal
+      - JWT_SECRET="this is my secret"
+      - JWT_ACCESS_EXPIRATION_MINUTES=1440
+      - JWT_REFRESH_EXPIRATION_DAYS=7
+      - MODE=release
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+
+  web:
+    build:
+      context: ./aes-meal-server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - VITE_BASE_URL=server:8080
+    depends_on:
+      - server
+    ports:
+      - "3000:80"
