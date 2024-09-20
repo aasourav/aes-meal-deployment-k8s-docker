@@ -1,8 +1,9 @@
 import axios from "axios";
+import { getProjectEnvVariables } from "../src/shared/projectEnvVariables";
+const { envVariables } = getProjectEnvVariables();
 
-const wind = window as any;
 const axiosInstance = axios.create({
-  baseURL: `${wind.env.VITE_BASE_URL as any}/v1`, // Replace with your API base URL
+  baseURL: `${envVariables.VITE_BASE_URL}/v1`, // Replace with your API base URL
   withCredentials: true, // Allow cookies to be sent in requests
 });
 

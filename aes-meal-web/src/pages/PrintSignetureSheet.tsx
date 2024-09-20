@@ -4,6 +4,8 @@ import { Button, Table, TableColumnsType } from "antd";
 import styled from "styled-components";
 import { DataSourceItemType } from "antd/es/auto-complete/index";
 import { usePDF } from "react-to-pdf";
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   width: 100dvh;
@@ -37,15 +39,13 @@ function extractDateComponents() {
 
   return { dayOfMonth, month, year };
 }
-const wind = window as any;
-
 // /meal-data-signeture/day/:day/month/:month/year/:year
 const PrintSignetureSheet = () => {
   const [usersMealSignetures, setUsersMealSignetures] = useState([]);
   const { dayOfMonth, month, year } = extractDateComponents();
   const fetchPending = async () => {
     const response = await axios(
-      `${wind.env.VITE_BASE_URL}/v1/super-user/meal-data-signeture/day/${dayOfMonth}/month/${month}/year/${year}`,
+      `${envVariables.VITE_BASE_URL}/v1/super-user/meal-data-signeture/day/${dayOfMonth}/month/${month}/year/${year}`,
       {
         method: "get",
         withCredentials: true,

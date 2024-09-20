@@ -4,6 +4,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { Button, Checkbox, Select, Table, TableColumnsType } from "antd";
 import { DataSourceItemType } from "antd/es/auto-complete/index";
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   display: flex;
@@ -11,8 +13,6 @@ const MainContainer = styled.div`
   width: 100dvw;
   height: 100dvh; /* Full screen height */
 `;
-
-const wind = window as any;
 
 const LeftContainer = styled.div`
   width: 25%;
@@ -79,10 +79,13 @@ const Home = () => {
   const [userDetails, setUserDetails] = useState<IUser>(defaultUser);
   const onLogout = async () => {
     try {
-      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/logout`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/logout`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
 
       localStorage.removeItem("aes-meal-user");
 
@@ -96,10 +99,13 @@ const Home = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/user`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
 
       localStorage.setItem(
         "aes-meal-user",
@@ -156,7 +162,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${wind.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
+      `${envVariables.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
       {
         method: "get",
         withCredentials: true,
@@ -197,7 +203,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${wind.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
+      `${envVariables.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
       {
         method: "get",
         withCredentials: true,
@@ -243,7 +249,7 @@ const Home = () => {
   const onWeeklyUpdateChange = async () => {
     try {
       const response = await axios(
-        `${wind.env.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
+        `${envVariables.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
         {
           method: "put",
           data: {
@@ -273,7 +279,7 @@ const Home = () => {
   const onClickPendingWeeklyPlan = async () => {
     try {
       const response = await axios(
-        `${wind.env.VITE_BASE_URL}/v1/user/clean-pending-meal`,
+        `${envVariables.VITE_BASE_URL}/v1/user/clean-pending-meal`,
         {
           method: "delete",
           withCredentials: true,

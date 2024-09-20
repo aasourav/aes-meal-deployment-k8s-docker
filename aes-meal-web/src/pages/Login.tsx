@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import axios from "axios";
-
-const wind = window as any;
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   width: 100dvw;
@@ -69,10 +69,13 @@ const Login: React.FC = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/user`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
 
       if (response.status === 200) {
         localStorage.setItem(

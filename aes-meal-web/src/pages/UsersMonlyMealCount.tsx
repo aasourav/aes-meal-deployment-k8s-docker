@@ -7,6 +7,8 @@ import { Input, Select } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   width: 100dvh;
@@ -20,8 +22,6 @@ interface IMonthYearQueryParams {
   queryParams: string;
 }
 
-const wind = window as any;
-
 const UsersMonlyMealCount = () => {
   const [usersMonthlyMeal, setUsersMonthlyMeal] = useState([]);
   const [detectChange, setDeltectChange] = useState(0);
@@ -34,7 +34,7 @@ const UsersMonlyMealCount = () => {
 
   const fetchPending = async () => {
     const response = await axios(
-      `${wind.env.VITE_BASE_URL}/v1/super-user/users-total-meal/month/${paramsWithQueryParams.month}/year/${paramsWithQueryParams.year}?employeeQuery=${paramsWithQueryParams.queryParams}`,
+      `${envVariables.VITE_BASE_URL}/v1/super-user/users-total-meal/month/${paramsWithQueryParams.month}/year/${paramsWithQueryParams.year}?employeeQuery=${paramsWithQueryParams.queryParams}`,
       {
         method: "get",
         withCredentials: true,

@@ -9,7 +9,8 @@ import PendingWeeklyMealPlan from "./PendingWeeklyPlan.tsx";
 import PrintSignetureSheet from "./PrintSignetureSheet.tsx";
 import UsersMonlyMealCount from "./UsersMonlyMealCount.tsx";
 
-const wind = window as any;
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   width: 100dvh;
@@ -34,10 +35,13 @@ const Admin = () => {
   const fetchUser = useCallback(async () => {
     try {
       // const response = await axiosInstance.get("/auth/user");
-      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/user`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
       if (response.status !== 200) {
         navigate("/login");
       }
