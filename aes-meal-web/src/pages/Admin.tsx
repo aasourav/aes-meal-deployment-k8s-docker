@@ -9,6 +9,8 @@ import PendingWeeklyMealPlan from "./PendingWeeklyPlan.tsx";
 import PrintSignetureSheet from "./PrintSignetureSheet.tsx";
 import UsersMonlyMealCount from "./UsersMonlyMealCount.tsx";
 
+const wind = window as any;
+
 const MainContainer = styled.div`
   width: 100dvh;
   height: 100dvh;
@@ -32,7 +34,7 @@ const Admin = () => {
   const fetchUser = useCallback(async () => {
     try {
       // const response = await axiosInstance.get("/auth/user");
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/user`, {
+      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
         method: "get",
         withCredentials: true,
       });

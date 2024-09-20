@@ -69,13 +69,14 @@ const Card = styled.h1`
 `;
 
 const weekOfDay = ["Sun", "Mon", "Tue", "Wed", "Thus", "Fri", "Sat"];
+const wind = window as any;
 
 const PendingWeeklyMealPlan = () => {
   // const [pendingWeeklyPlanRequests, setPendingWeeklyPlanRequests] =
   const [pendingWeeklyPlans, setPendingWeeklyPlans] = useState<any[]>([]);
   const fetchPending = async () => {
     const response = await axios(
-      `${import.meta.env.VITE_BASE_URL}/v1/super-user/get-pending-weekly-meal-plan`,
+      `${wind.env.VITE_BASE_URL}/v1/super-user/get-pending-weekly-meal-plan`,
       {
         method: "get",
         withCredentials: true,
@@ -91,7 +92,7 @@ const PendingWeeklyMealPlan = () => {
   ) => {
     try {
       await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/super-user/action-pending-weekly-meal-plan/action/${actionType}/user/${userId}`,
+        `${wind.env.VITE_BASE_URL}/v1/super-user/action-pending-weekly-meal-plan/action/${actionType}/user/${userId}`,
         {
           method: "put",
           withCredentials: true,

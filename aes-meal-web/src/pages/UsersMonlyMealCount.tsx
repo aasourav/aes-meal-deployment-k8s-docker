@@ -20,6 +20,8 @@ interface IMonthYearQueryParams {
   queryParams: string;
 }
 
+const wind = window as any;
+
 const UsersMonlyMealCount = () => {
   const [usersMonthlyMeal, setUsersMonthlyMeal] = useState([]);
   const [detectChange, setDeltectChange] = useState(0);
@@ -32,7 +34,7 @@ const UsersMonlyMealCount = () => {
 
   const fetchPending = async () => {
     const response = await axios(
-      `${import.meta.env.VITE_BASE_URL}/v1/super-user/users-total-meal/month/${paramsWithQueryParams.month}/year/${paramsWithQueryParams.year}?employeeQuery=${paramsWithQueryParams.queryParams}`,
+      `${wind.env.VITE_BASE_URL}/v1/super-user/users-total-meal/month/${paramsWithQueryParams.month}/year/${paramsWithQueryParams.year}?employeeQuery=${paramsWithQueryParams.queryParams}`,
       {
         method: "get",
         withCredentials: true,

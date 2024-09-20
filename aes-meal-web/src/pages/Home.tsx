@@ -12,6 +12,8 @@ const MainContainer = styled.div`
   height: 100dvh; /* Full screen height */
 `;
 
+const wind = window as any;
+
 const LeftContainer = styled.div`
   width: 25%;
   background-color: rgb(59 130 246 / 0.5);
@@ -77,7 +79,7 @@ const Home = () => {
   const [userDetails, setUserDetails] = useState<IUser>(defaultUser);
   const onLogout = async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/logout`, {
+      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/logout`, {
         method: "get",
         withCredentials: true,
       });
@@ -94,7 +96,7 @@ const Home = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/user`, {
+      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
         method: "get",
         withCredentials: true,
       });
@@ -154,7 +156,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${import.meta.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
+      `${wind.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
       {
         method: "get",
         withCredentials: true,
@@ -195,7 +197,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${import.meta.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
+      `${wind.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
       {
         method: "get",
         withCredentials: true,
@@ -241,7 +243,7 @@ const Home = () => {
   const onWeeklyUpdateChange = async () => {
     try {
       const response = await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
+        `${wind.env.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
         {
           method: "put",
           data: {
@@ -271,7 +273,7 @@ const Home = () => {
   const onClickPendingWeeklyPlan = async () => {
     try {
       const response = await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/user/clean-pending-meal`,
+        `${wind.env.VITE_BASE_URL}/v1/user/clean-pending-meal`,
         {
           method: "delete",
           withCredentials: true,
@@ -331,7 +333,9 @@ const Home = () => {
         {userDetails.pendingWeeklyMealPlan &&
         userDetails.pendingWeeklyMealPlan.length > 0
           ? userDetails.pendingWeeklyMealPlan.map((data, index) => (
-              <Checkbox key={index} checked={data}>{weekOfDay[index]}</Checkbox>
+              <Checkbox key={index} checked={data}>
+                {weekOfDay[index]}
+              </Checkbox>
             ))
           : null}
       </LeftContainer>

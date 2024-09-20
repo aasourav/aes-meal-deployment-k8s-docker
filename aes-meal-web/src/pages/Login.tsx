@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import axios from "axios";
 
+const wind = window as any;
+
 const MainContainer = styled.div`
   width: 100dvw;
   height: 100dvh;
@@ -67,7 +69,7 @@ const Login: React.FC = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/user`, {
+      const response = await axios(`${wind.env.VITE_BASE_URL}/v1/auth/user`, {
         method: "get",
         withCredentials: true,
       });

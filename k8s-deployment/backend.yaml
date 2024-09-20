@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aes-server-service
+spec:
+  selector:
+    app: aes-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aes-server-deployment
+  labels:
+    app: aes-server
+    app.kubernetes.io/name: aes-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aes-server
+  template:
+    metadata:
+      labels:
+        app: aes-server
+    spec:
+      containers:
+      - name: aes-server
+        image: aasourav/aes-meal-server:0.2
+        ports:
+        - containerPort: 8080
+        env:
+          - name: MONGO_URI
+            value: "mongodb://aes-meal-db.default.svc.cluster.local:27017"
+          - name: MONGO_DATABASE
+            value: "aes-meal"
+          - name: MODE
+            value: "release"
