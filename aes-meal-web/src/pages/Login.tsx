@@ -77,7 +77,7 @@ const Login: React.FC = () => {
         },
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 && response?.data?.data?.userData) {
         localStorage.setItem(
           "aes-meal-user",
           JSON.stringify(response?.data?.data?.userData),

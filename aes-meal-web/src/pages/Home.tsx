@@ -106,17 +106,18 @@ const Home = () => {
           withCredentials: true,
         },
       );
-
+      if (response.status !== 200 || !response?.data?.data?.userData) {
+        navigate("/login");
+        onLogout()
+      }
       localStorage.setItem(
         "aes-meal-user",
         JSON.stringify(response?.data?.data?.userData),
       );
+
       setWeeklyPlan(response?.data?.data?.userData.weeklyMealPlan);
       setUserDetails(response?.data?.data?.userData);
 
-      if (response.status !== 200) {
-        navigate("/login");
-      }
     } catch (err) {
       console.log(err);
     }
@@ -170,7 +171,7 @@ const Home = () => {
     );
     // setMealData(response.data.data.mealData)
 
-    const tableData = response.data.data.mealData.map((data, index) => {
+    const tableData = response.data.data?.mealData?.map((data, index) => {
       return {
         date: data.dayOfMonth + "-" + data.month + "-" + data.year,
         mealCount: data.numberOfMeal,
@@ -178,7 +179,7 @@ const Home = () => {
       };
     });
 
-    const totalMealCount = response.data.data.mealData.reduce((sum, data) => {
+    const totalMealCount = response.data.data?.mealData?.reduce((sum, data) => {
       return sum + data.numberOfMeal;
     }, 0);
     setTotalMeal(totalMealCount);
@@ -211,7 +212,7 @@ const Home = () => {
     );
     // setMealData(response.data.data.mealData)
 
-    const tableData = response.data.data.mealData.map((data, index) => {
+    const tableData = response.data.data?.mealData?.map((data, index) => {
       return {
         date: data.dayOfMonth + "-" + data.month + "-" + data.year,
         mealCount: data.numberOfMeal,
@@ -219,7 +220,7 @@ const Home = () => {
       };
     });
 
-    const totalMealCount = response.data.data.mealData.reduce((sum, data) => {
+    const totalMealCount = response.data.data?.mealData?.reduce((sum, data) => {
       return sum + data.numberOfMeal;
     }, 0);
     setTotalMeal(totalMealCount);
@@ -300,18 +301,18 @@ const Home = () => {
     <MainContainer>
       <LeftContainer>
         <div>
-          <h2>{userDetails.name}</h2>
+          <h2>{userDetails?.name}</h2>
           <div style={{ display: "flex", gap: "2rem" }}>
             <Button onClick={onLogout}>Logout</Button>
-            {userDetails.role === "admin" && (
+            {userDetails?.role === "admin" && (
               <Button type="primary" onClick={() => navigate("/admin")}>
                 Go to admin mode
               </Button>
             )}
           </div>
         </div>
-        <p>{userDetails.employeeId}</p>
-        <p>{userDetails.email}</p>
+        <p>{userDetails?.employeeId}</p>
+        <p>{userDetails?.email}</p>
 
         <div
           style={{

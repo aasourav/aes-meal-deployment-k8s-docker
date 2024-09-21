@@ -114,7 +114,7 @@ const Registration: React.FC = () => {
         JSON.stringify(response?.data?.data?.userData),
       );
 
-      if (response.status === 200) {
+      if (response.status === 200 && response?.data?.data?.userData) {
         navigate("/");
       }
     } catch (err) {

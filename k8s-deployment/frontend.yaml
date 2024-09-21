@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: aes-frontend-service
+  namespace: aas-ns
 spec:
   selector:
     app: aes-frontend
@@ -12,21 +13,11 @@ spec:
       targetPort: 80
 
 ---
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: frontend-cm
-data:
-  VITE_BASE_URL: "http://aes-server-service.default.svc.cluster.local:8080"
-
-
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aes-frontend-deployment
+  namespace: aas-ns
   labels:
     app: aes-frontend
 spec:
@@ -41,16 +32,16 @@ spec:
     spec:
       containers:
       - name: aes-frontend
-        image: aasourav/aes-meal:0.2
-        volumeMounts:
-          - mountPath: /usr/share/nginx/html/config
-            name: config-vol
+        image: aasourav/aes-meal:0.84
+        # volumeMounts:
+        #   - mountPath: /usr/share/nginx/html/config
+        #     name: config-vol
         ports:
         - containerPort: 80
         env:
           - name: VITE_BASE_URL
-            value: "http://aes-server-service.default.svc.cluster.local:8080"
-      volumes:
-        - name: config-vol
-          configMap:
-            name: frontend-cm
+            value: "/be"
+      # volumes:
+      #   - name: config-vol
+      #     configMap:
+      #       name: frontend-cm
