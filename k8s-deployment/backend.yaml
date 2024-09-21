@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: aes-server
-        image: aasourav/aes-meal-server:0.26
+        image: aasourav/aes-meal-server:0.27
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
