@@ -395,7 +395,7 @@ func UserLogout(c *gin.Context) {
 		-1,                // Expiry in seconds (negative value to delete the cookie)
 		"/",               // Path
 		"",                // Domain (empty for default)
-		true,              // Secure (true if using HTTPS)
+		false,             // Secure (true if using HTTPS)
 		true,              // HttpOnly
 	)
 
