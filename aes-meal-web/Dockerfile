@@ -26,7 +26,7 @@ FROM nginx:alpine
 EXPOSE 80
 # CMD ["nginx", "-g", "daemon off;"]
 
-ARG VITE_BASE_URL="localhost:8080"
+ARG VITE_BASE_URL="/be"
 ENV VITE_BASE_URL=${VITE_BASE_URL}
 
 

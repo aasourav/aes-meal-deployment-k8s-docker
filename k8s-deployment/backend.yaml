@@ -39,7 +39,7 @@ spec:
         - containerPort: 8080
         env:
           - name: MONGO_URI
-            value: "mongodb://root:root@aes-mongodb-0.aes-meal-db.ingress-nginx.svc.cluster.local:27017/aes-meal?retryWrites=true&w=majority&authSource=admin"
+            value: "mongodb://aesmeal:12345678Ma@146.190.203.115:27017/aes-meal?retryWrites=true&w=majority&authSource=admin"
           - name: MONGO_DATABASE
             value: "aes-meal"
           - name: MODE
