@@ -366,8 +366,10 @@ func Login(c *gin.Context) {
 	response.Data = gin.H{
 		"user": user,
 	}
-	c.SetCookie("aes-meal-access", *accessToken, 3600, "/", "172.18.0.100", false, true)
-	c.SetCookie("aes-meal-refresh", *refreshToken, 3600, "/", "172.18.0.100", false, true)
+
+	origin := c.Request.Header.Get("Origin")
+	c.SetCookie("aes-meal-access", *accessToken, 3600, "/", origin, false, true)
+	c.SetCookie("aes-meal-refresh", *refreshToken, 3600, "/", origin, false, true)
 	response.SendResponse(c)
 }
 
