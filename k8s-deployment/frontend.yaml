@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: aes-frontend-service
-  namespace: ingress-nginx
+  namespace: test-ns
 spec:
   selector:
     app: aes-frontend
@@ -17,7 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aes-frontend-deployment
-  namespace: ingress-nginx
+  namespace: test-ns
   labels:
     app: aes-frontend
 spec:
@@ -33,6 +33,7 @@ spec:
       containers:
       - name: aes-frontend
         image: aasourav/aes-meal:0.84
+        imagePullPolicy: IfNotPresent
         # volumeMounts:
         #   - mountPath: /usr/share/nginx/html/config
         #     name: config-vol
