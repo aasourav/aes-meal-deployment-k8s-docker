@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -9,5 +10,10 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.env = {
+        VITE_BASE_URL: "${VITE_BASE_URL}"
+      };
+    </script>
   </body>
 </html>

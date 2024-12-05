@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import axios from "axios";
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   width: 100dvw;
@@ -67,12 +69,15 @@ const Login: React.FC = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/user`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/user`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
 
-      if (response.status === 200) {
+      if (response.status === 200 && response?.data?.data?.userData) {
         localStorage.setItem(
           "aes-meal-user",
           JSON.stringify(response?.data?.data?.userData),

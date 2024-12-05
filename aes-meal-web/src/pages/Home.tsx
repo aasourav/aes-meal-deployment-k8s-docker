@@ -4,6 +4,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { Button, Checkbox, Select, Table, TableColumnsType } from "antd";
 import { DataSourceItemType } from "antd/es/auto-complete/index";
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
 
 const MainContainer = styled.div`
   display: flex;
@@ -77,10 +79,13 @@ const Home = () => {
   const [userDetails, setUserDetails] = useState<IUser>(defaultUser);
   const onLogout = async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/logout`, {
-        method: "get",
-        withCredentials: true,
-      });
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/logout`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
 
       localStorage.removeItem("aes-meal-user");
 
@@ -94,21 +99,25 @@ const Home = () => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axios(`${import.meta.env.VITE_BASE_URL}/v1/auth/user`, {
-        method: "get",
-        withCredentials: true,
-      });
-
+      const response = await axios(
+        `${envVariables.VITE_BASE_URL}/v1/auth/user`,
+        {
+          method: "get",
+          withCredentials: true,
+        },
+      );
+      if (response.status !== 200 || !response?.data?.data?.userData) {
+        navigate("/login");
+        onLogout()
+      }
       localStorage.setItem(
         "aes-meal-user",
         JSON.stringify(response?.data?.data?.userData),
       );
+
       setWeeklyPlan(response?.data?.data?.userData.weeklyMealPlan);
       setUserDetails(response?.data?.data?.userData);
 
-      if (response.status !== 200) {
-        navigate("/login");
-      }
     } catch (err) {
       console.log(err);
     }
@@ -154,7 +163,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${import.meta.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
+      `${envVariables.VITE_BASE_URL}/v1/user/user-meal-data/month/${month}/year/${year}`,
       {
         method: "get",
         withCredentials: true,
@@ -162,7 +171,7 @@ const Home = () => {
     );
     // setMealData(response.data.data.mealData)
 
-    const tableData = response.data.data.mealData.map((data, index) => {
+    const tableData = response.data.data?.mealData?.map((data, index) => {
       return {
         date: data.dayOfMonth + "-" + data.month + "-" + data.year,
         mealCount: data.numberOfMeal,
@@ -170,7 +179,7 @@ const Home = () => {
       };
     });
 
-    const totalMealCount = response.data.data.mealData.reduce((sum, data) => {
+    const totalMealCount = response.data.data?.mealData?.reduce((sum, data) => {
       return sum + data.numberOfMeal;
     }, 0);
     setTotalMeal(totalMealCount);
@@ -195,7 +204,7 @@ const Home = () => {
         mealData: IMealRecord[];
       };
     }>(
-      `${import.meta.env.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
+      `${envVariables.VITE_BASE_URL}/v1/user/user-meal-data/month/${mealHistory.month}/year/${mealHistory.year}`,
       {
         method: "get",
         withCredentials: true,
@@ -203,7 +212,7 @@ const Home = () => {
     );
     // setMealData(response.data.data.mealData)
 
-    const tableData = response.data.data.mealData.map((data, index) => {
+    const tableData = response.data.data?.mealData?.map((data, index) => {
       return {
         date: data.dayOfMonth + "-" + data.month + "-" + data.year,
         mealCount: data.numberOfMeal,
@@ -211,7 +220,7 @@ const Home = () => {
       };
     });
 
-    const totalMealCount = response.data.data.mealData.reduce((sum, data) => {
+    const totalMealCount = response.data.data?.mealData?.reduce((sum, data) => {
       return sum + data.numberOfMeal;
     }, 0);
     setTotalMeal(totalMealCount);
@@ -241,7 +250,7 @@ const Home = () => {
   const onWeeklyUpdateChange = async () => {
     try {
       const response = await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
+        `${envVariables.VITE_BASE_URL}/v1/user/update-weekly-meal-plan`,
         {
           method: "put",
           data: {
@@ -271,7 +280,7 @@ const Home = () => {
   const onClickPendingWeeklyPlan = async () => {
     try {
       const response = await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/user/clean-pending-meal`,
+        `${envVariables.VITE_BASE_URL}/v1/user/clean-pending-meal`,
         {
           method: "delete",
           withCredentials: true,
@@ -292,18 +301,18 @@ const Home = () => {
     <MainContainer>
       <LeftContainer>
         <div>
-          <h2>{userDetails.name}</h2>
+          <h2>{userDetails?.name}</h2>
           <div style={{ display: "flex", gap: "2rem" }}>
             <Button onClick={onLogout}>Logout</Button>
-            {userDetails.role === "admin" && (
+            {userDetails?.role === "admin" && (
               <Button type="primary" onClick={() => navigate("/admin")}>
                 Go to admin mode
               </Button>
             )}
           </div>
         </div>
-        <p>{userDetails.employeeId}</p>
-        <p>{userDetails.email}</p>
+        <p>{userDetails?.employeeId}</p>
+        <p>{userDetails?.email}</p>
 
         <div
           style={{
@@ -331,7 +340,9 @@ const Home = () => {
         {userDetails.pendingWeeklyMealPlan &&
         userDetails.pendingWeeklyMealPlan.length > 0
           ? userDetails.pendingWeeklyMealPlan.map((data, index) => (
-              <Checkbox key={index} checked={data}>{weekOfDay[index]}</Checkbox>
+              <Checkbox key={index} checked={data}>
+                {weekOfDay[index]}
+              </Checkbox>
             ))
           : null}
       </LeftContainer>

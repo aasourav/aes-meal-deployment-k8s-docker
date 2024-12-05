@@ -3,6 +3,9 @@ import axios from "axios";
 import { Button, Checkbox } from "antd";
 import styled from "styled-components";
 
+import { getProjectEnvVariables } from "../shared/projectEnvVariables.ts";
+const { envVariables } = getProjectEnvVariables();
+
 function getCurrentWeekDatesWithMonth() {
   const today = new Date();
   const currentDayOfWeek = today.getDay(); // 0 for Sunday, 1 for Monday, etc.
@@ -69,13 +72,12 @@ const Card = styled.h1`
 `;
 
 const weekOfDay = ["Sun", "Mon", "Tue", "Wed", "Thus", "Fri", "Sat"];
-
 const PendingWeeklyMealPlan = () => {
   // const [pendingWeeklyPlanRequests, setPendingWeeklyPlanRequests] =
   const [pendingWeeklyPlans, setPendingWeeklyPlans] = useState<any[]>([]);
   const fetchPending = async () => {
     const response = await axios(
-      `${import.meta.env.VITE_BASE_URL}/v1/super-user/get-pending-weekly-meal-plan`,
+      `${envVariables.VITE_BASE_URL}/v1/super-user/get-pending-weekly-meal-plan`,
       {
         method: "get",
         withCredentials: true,
@@ -91,7 +93,7 @@ const PendingWeeklyMealPlan = () => {
   ) => {
     try {
       await axios(
-        `${import.meta.env.VITE_BASE_URL}/v1/super-user/action-pending-weekly-meal-plan/action/${actionType}/user/${userId}`,
+        `${envVariables.VITE_BASE_URL}/v1/super-user/action-pending-weekly-meal-plan/action/${actionType}/user/${userId}`,
         {
           method: "put",
           withCredentials: true,

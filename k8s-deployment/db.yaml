@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aes-meal-db
+  namespace: test-ns
+  labels:
+    app: aes-ns
+spec:
+  ports:
+  - port: 27017
+    name: mongodb
+  clusterIP: None
+  selector:
+    app: mongodb-deploy
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: aes-mongodb
+  namespace: test-ns
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-deploy # has to match .spec.template.metadata.labels
+  serviceName: "aes-meal-db"
+  replicas: 2 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: mongodb-deploy # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongodb
+        imagePullPolicy: IfNotPresent
+        image: mongo:jammy
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: "root"
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: "root"
+        ports:
+        - containerPort: 27017
+          name: mongo-port
+        volumeMounts:
+        - name: aes-db
+          mountPath: /aes-meal-db
+  volumeClaimTemplates:
+  - metadata:
+      name: aes-db
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "standard"
+      resources:
+        requests:
+          storage: 1Gi
